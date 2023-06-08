@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { User, addUser, deleteUser, updateUser } from '../Redux/userActions';
   
 import { Container, Grid, Paper, Typography,Button,Box } from '@mui/material';
-
+// import {useQueries} from 'react-query'
 
 interface UserListProps {
   users?: User[];

@@ -1,7 +1,18 @@
-import React from 'react';
+import React,{useState} from 'react';
+import Posts from './Fetch';
 
 const About = () => {
-  return <h1>About Us</h1>;
+  const [showPosts, setShowPosts] = useState(false);
+
+  const handleButtonClick = () => {
+    setShowPosts(true);
+  };
+  return (
+   <div>
+      <button onClick={handleButtonClick}>Show Posts</button>
+      {showPosts && <Posts />}
+    </div>
+  )
 };
 
 export default About;
