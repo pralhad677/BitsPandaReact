@@ -2,7 +2,7 @@ import React,{ useEffect } from 'react';
 import { connect } from 'react-redux'; 
 import { User, addUser, deleteUser, updateUser } from '../Redux/userActions';
   
-
+import { Container, Grid, Paper, Typography } from '@mui/material';
 
 
 interface UserListProps {
@@ -54,24 +54,34 @@ const UserList: React.FC<UserListProps> = ({
   },[users]);
   return (
     <div>
-        <div className="container">
-            <div className="row row-cols-3  gx-3">
-                <div className="col-sm-3 m-3 bg-light "><h5>Id</h5>
-                <table className="table">
-            <tbody>
-              {users?.map((user) => (
-                <tr key={user.Id}>
-                  <td>{user.Id}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-                </div>
-                <div className="col-sm-3 m-3 bg-light">Username</div>
-                <div className="col-sm-3 m-3 bg-light">Password</div>
-            </div>
-        </div>
-      <button className='btn btn-primary' onClick={handleAddUser}>Add User</button>
+          <Container maxWidth="md">
+      <Grid container spacing={2}>
+        <Grid item xs={4}>
+          <Paper elevation={0} sx={{ p: 2 }}>
+            <Typography variant="h5">Id</Typography>
+            {users?.map((user) => (
+              <Typography key={user.Id}>{user.Id}</Typography>
+            ))}
+          </Paper>
+        </Grid>
+        <Grid item xs={4}>
+          <Paper elevation={0} sx={{ p: 2 }}>
+            <Typography variant="h5">Username</Typography>
+            {users?.map((user) => (
+              <Typography key={user.Id}>{user.Username}</Typography>
+            ))}
+          </Paper>
+        </Grid>
+        <Grid item xs={4}>
+          <Paper elevation={0} sx={{ p: 2 }}>
+            <Typography variant="h5">Password</Typography>
+            {users?.map((user) => (
+              <Typography key={user.Id}>{user.Password}</Typography>
+            ))}
+          </Paper>
+        </Grid>
+      </Grid>
+    </Container>
 
       {users?.map((user) => (
         <div key={user.Id}>
