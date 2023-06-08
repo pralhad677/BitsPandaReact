@@ -2,7 +2,7 @@ import React,{ useEffect } from 'react';
 import { connect } from 'react-redux'; 
 import { User, addUser, deleteUser, updateUser } from '../Redux/userActions';
   
-import { Container, Grid, Paper, Typography } from '@mui/material';
+import { Container, Grid, Paper, Typography,Button,Box } from '@mui/material';
 
 
 interface UserListProps {
@@ -61,45 +61,71 @@ const UserList: React.FC<UserListProps> = ({
   },[users,userCount]); 
   return (
     <div>
-          <Container maxWidth="md">
-      <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <Paper elevation={0} sx={{ p: 2 }}>
-            <Typography variant="h5">Id</Typography>
-            {users?.map((user) => (
-              <Typography key={user.Id}>{user.Id}</Typography>
-            ))}
-          </Paper>
+        
+ 
+    <Container maxWidth="md">
+      <Paper elevation={0} sx={{ p: 2 }}>
+        <Typography variant="h5"></Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Grid container alignItems="center" spacing={2}>
+              <Grid item xs={3}>
+                <Typography variant="h5">Id</Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Typography variant="h5">Username</Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Typography variant="h5">Password</Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Typography variant="h5">Action</Typography>
+              </Grid>
+              <Grid item xs={3}></Grid>
+            </Grid>
+          </Grid>
+          {users?.map((user) => (
+            <Grid item xs={12} key={user.Id}>
+              <Grid container alignItems="center" spacing={2}>
+                <Grid item xs={3}>
+                  <Typography>{user.Id}</Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography>{user.Username}</Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography>{user.Password}</Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleUpdateUser(user,"random")}
+                    >
+                      Update
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleDeleteUser(user.Id)}
+                    >
+                      Delete
+                    </Button>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Grid>
+          ))}
         </Grid>
-        <Grid item xs={4}>
-          <Paper elevation={0} sx={{ p: 2 }}>
-            <Typography variant="h5">Username</Typography>
-            {users?.map((user) => (
-              <Typography key={user.Id}>{user.Username}</Typography>
-            ))}
-          </Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper elevation={0} sx={{ p: 2 }}>
-            <Typography variant="h5">Password</Typography>
-            {users?.map((user) => (
-              <Typography key={user.Id}>{user.Password}</Typography>
-            ))}
-          </Paper>
-        </Grid>
-      </Grid>
+      </Paper>
     </Container>
-   
+ 
+
 
     <button className='btn btn-primary' onClick={()=>handleAddUser(number)}>Add User</button>
     
-      {users?.map((user) => (
-        <div key={user.Id * Math.random()*1000}>
-          <span>{user.Username}</span>
-          <button onClick={() => handleDeleteUser(user.Id)}>Delete</button>
-          <button onClick={() => handleUpdateUser(user,"random")}>Update</button>
-        </div>
-      ))}
+      
     </div>
   );
 };
