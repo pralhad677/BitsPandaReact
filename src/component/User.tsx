@@ -21,9 +21,10 @@ const UserList: React.FC<UserListProps> = ({
   updateUser,
 }) => {
      
-  const handleAddUser = () => {
+  const handleAddUser = (id:number) => {
+    alert(id);
     const newUser: User = {
-      Id: 1,
+      Id: id,
       Username: 'JohnDoe',
       Password: 'password',
     };
@@ -40,18 +41,24 @@ const UserList: React.FC<UserListProps> = ({
     console.log('user',user)
     const updatedUser1: User = {
       ...user,
+
       Username:"asd",
       Password: 'newpassword',
     };
     console.log('udpate user',updatedUser1)
     updateUser?.(updatedUser1);
   };
+  const userCount = (users?.length ?? 0) + 1;
+  console.log('userCount',userCount)
+  const [number, setNumber] = React.useState(userCount);
+  console.log('number',number)
   useEffect(() => {
     // This code will run after every render
     // You can perform DOM manipulation or other side effects here
     console.log('DOM has changed');
     console.log(users)
-  },[users]);
+    setNumber(userCount)
+  },[users,userCount]); 
   return (
     <div>
           <Container maxWidth="md">
@@ -82,9 +89,12 @@ const UserList: React.FC<UserListProps> = ({
         </Grid>
       </Grid>
     </Container>
+   
 
+    <button className='btn btn-primary' onClick={()=>handleAddUser(number)}>Add User</button>
+    
       {users?.map((user) => (
-        <div key={user.Id}>
+        <div key={user.Id * Math.random()*1000}>
           <span>{user.Username}</span>
           <button onClick={() => handleDeleteUser(user.Id)}>Delete</button>
           <button onClick={() => handleUpdateUser(user,"random")}>Update</button>
