@@ -16,7 +16,7 @@ interface A {
   }
   
 export const AuthProvider: React.FC<A> = ({ children }) => {
-  const [isAuthenticated, setAuthenticated] = useState(true);
+  const [isAuthenticated, setAuthenticated] = useState(false);
   const handleSetAuthenticated = (value: boolean) => {
     setAuthenticated(value);
   };

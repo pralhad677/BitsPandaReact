@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import { User, addUser, deleteUser, updateUser } from '../Redux/userActions';
   
 import { Container, Grid, Paper, Typography,Button,Box } from '@mui/material';
+import Modal from 'react-modal';
+import MyForm from './SignUp';
 // import {useQueries} from 'react-query'
-
+Modal.setAppElement('#root');
 interface UserListProps {
   users?: User[];
   // Add other props from the store if needed
@@ -48,10 +50,21 @@ const UserList: React.FC<UserListProps> = ({
     console.log('udpate user',updatedUser1)
     updateUser?.(updatedUser1);
   };
-  const userCount = (users?.length ?? 0) + 1;
-  console.log('userCount',userCount)
+  const userCount = (users?.length ?? 0) + 1; 
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  
+
   const [number, setNumber] = React.useState(userCount);
-  console.log('number',number)
+   
   useEffect(() => {
     // This code will run after every render
     // You can perform DOM manipulation or other side effects here
@@ -124,7 +137,13 @@ const UserList: React.FC<UserListProps> = ({
 
 
     <button className='btn btn-primary' onClick={()=>handleAddUser(number)}>Add User</button>
-    
+
+    <button onClick={openModal}>Open Modal</button>
+    <Modal isOpen={isOpen} onRequestClose={closeModal}>
+       {/* <MyForm /> */}
+        <p>This is the content of the modal.</p>
+        <button onClick={closeModal}>Close</button>
+      </Modal>
       
     </div>
   );
