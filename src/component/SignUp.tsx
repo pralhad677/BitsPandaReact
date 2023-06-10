@@ -4,7 +4,8 @@ import { z } from 'zod';
 
 import TextField from '@mui/material/TextField';
 import   './Form.css'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { fn } from './generic';
 
 const schema = z.object({
   Username: z.string().nonempty().max(20),
@@ -24,6 +25,7 @@ const validatePassword = (value:string) => {
 };
 
 const MyForm = () => {
+  const navigate  = useNavigate();
   const myStyle = {
     color: 'red',
     fontSize: '16px',
@@ -47,8 +49,19 @@ const MyForm = () => {
     return value === watchPassword || 'Passwords do not match';
   };
 
-  const onSubmit = (data:Record<string,any>) => {
+  const onSubmit = async (data:Record<string,any>) => {
+   
     console.log('data',data);
+    let x = await fn({ method: 'post', url: 'https://localhost:7224/api/admin/SignUp', data });   
+    let {message:token,isSuccess} =x as any
+    
+    if(isSuccess){
+      
+ 
+      //  setAuthenticated(true);
+      //  setOpen(true)
+       navigate('/Login');
+   } 
   };
 
   const isFormValid = Object.keys(errors).length === 0;
@@ -98,7 +111,7 @@ const MyForm = () => {
             </div>
             <div className="m-3">
               <button className="btn btn-primary" type="submit" disabled={!isFormValid}>
-                Submit
+                Signup
               </button>
                <div className='d-flex'>
                 <text>already a user?</text>

@@ -14,7 +14,7 @@ const fetchPosts = async (): Promise<Post[]> => {
     throw new Error('An error occurred while fetching posts');
   }
   const data = await response.json();
-//   alert(data.length)
+ 
   console.log('data',data)
   return data;
 };

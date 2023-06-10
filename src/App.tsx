@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
@@ -10,16 +10,15 @@ import UserList from './component/User'
  
 import MyForm from './component/SignUp';
 import { QueryClient, QueryClientProvider } from 'react-query'; 
-import User from './component/User';  
+  
 import { ProtectedRoute } from './AuthGuard/AuthGuard';
-import { AuthProvider } from './AuthGuard/AuthProvider';
+import { AuthContext, AuthProvider } from './AuthGuard/AuthProvider';
 import { Login } from './component/login';
 const queryClient = new QueryClient();
 
 function App() {
-  const isAuthenticated = true; // Replace with your authentication logic
-  const authenticationPath = '/login';
-  const redirectPath = '/';
+   
+   
   return (
     <QueryClientProvider client={queryClient}>
       
@@ -35,7 +34,7 @@ function App() {
             <UserList />
           </ProtectedRoute>
         }
-      />
+         />
         <Route path="/Signup" element={<MyForm />} />
         <Route path="/Login" element={<Login />} />
         <Route path="*" element={<NotFound />} />

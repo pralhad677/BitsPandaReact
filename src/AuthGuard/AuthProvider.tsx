@@ -16,13 +16,19 @@ interface A {
   }
   
 export const AuthProvider: React.FC<A> = ({ children }) => {
-  const [isAuthenticated, setAuthenticated] = useState(false);
+  const [isAuthenticated, setAuthenticated] = useState<boolean>(sessionStorage.getItem('token')!==null?true:false);
+  
+  
+  
   const handleSetAuthenticated = (value: boolean) => {
+    console.log('value',value)
     setAuthenticated(value);
   };
+  React.useEffect(()=>{ 
+  },[isAuthenticated])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setAuthenticated:handleSetAuthenticated }}>
+    <AuthContext.Provider value={{ isAuthenticated, setAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

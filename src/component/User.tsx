@@ -39,7 +39,7 @@ const UserList: React.FC<UserListProps> = ({
   };
 
   const handleUpdateUser = (user: User,Username:string) => {
-    // alert(Username)
+    
     console.log('user',user)
     const updatedUser1: User = {
       ...user,
