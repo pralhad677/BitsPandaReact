@@ -13,6 +13,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import User from './component/User';  
 import { ProtectedRoute } from './AuthGuard/AuthGuard';
 import { AuthProvider } from './AuthGuard/AuthProvider';
+import { Login } from './component/login';
 const queryClient = new QueryClient();
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
         }
       />
         <Route path="/Signup" element={<MyForm />} />
+        <Route path="/Login" element={<Login />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </BrowserRouter>

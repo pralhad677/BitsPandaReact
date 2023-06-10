@@ -8,8 +8,7 @@ import { Link } from 'react-router-dom';
 
 const schema = z.object({
   Username: z.string().nonempty().max(20),
-  Password: z.string().min(6),
-  confirmPassword: z.string(),
+  Password: z.string().min(6), 
 });
 
 const validateUsername = (value:string) => {
@@ -23,7 +22,7 @@ const validatePassword = (value:string) => {
   return value.length >= 6 || 'Password should be at least 6 characters';
 };
 
-const MyForm = () => {
+export const Login = () => {
   const myStyle = {
     color: 'red',
     fontSize: '16px',
@@ -39,13 +38,9 @@ const MyForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
-  } = useForm();
-  const watchPassword = watch('Password');
-
-  const validateConfirmPassword = (value:string) => {
-    return value === watchPassword || 'Passwords do not match';
-  };
+    
+  } = useForm(); 
+   
 
   const onSubmit = (data:Record<string,any>) => {
     console.log('data',data);
@@ -85,26 +80,12 @@ const MyForm = () => {
                 helperText={errors.Password ? String(errors.Password.message) : ''}
               />
             </div>
-            <div className="m-3">
-              <TextField
-                label="Confirm Password"
-                type="password"
-                {...register('confirmPassword', {
-                  validate: validateConfirmPassword,
-                })}
-                error={!!errors.confirmPassword}
-                helperText={errors.confirmPassword ? String(errors.confirmPassword.message) : ''}
-              />
-            </div>
+          
             <div className="m-3">
               <button className="btn btn-primary" type="submit" disabled={!isFormValid}>
                 Submit
               </button>
-               <div className='d-flex'>
-                <text>already a user?</text>
-                <Link className="nav-link " style={myStyle} to="/Login">Login</Link> 
-
-               </div>
+               
             </div>
           </form>
         </div>
@@ -113,5 +94,4 @@ const MyForm = () => {
     </div>
   );
 };
-
-export default MyForm;
+ 
