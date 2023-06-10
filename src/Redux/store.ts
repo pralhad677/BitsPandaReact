@@ -1,6 +1,6 @@
 // store.ts
 import { createStore } from 'redux';
-import userReducer from './userReducer';
+import { userReducer } from './reducer';
 
 const store = createStore(userReducer);
 

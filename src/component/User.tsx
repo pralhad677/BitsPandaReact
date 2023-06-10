@@ -1,87 +1,63 @@
-import React,{ useEffect } from 'react';
-import { connect } from 'react-redux'; 
-import { User, addUser, deleteUser, updateUser } from '../Redux/userActions';
+import React,{ useCallback, useEffect } from 'react';
+import { connect } from 'react-redux';  
   
 import { Container, Grid, Paper, Typography,Button,Box } from '@mui/material';
-import Modal from 'react-modal';
-import MyForm from './SignUp';
+import Modal from 'react-modal'; 
 import { fn } from './generic'; 
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addUser, updateUser, deleteUser } from '../Redux/action';
+import { RootState, User } from '../Redux/type';
+
+ 
 Modal.setAppElement('#root');
-interface UserListProps {
-  users?: User[];
-  // Add other props from the store if needed
-  // ...
-  addUser?: (user: User) => void;
-  deleteUser?: (userId: number) => void;
-  updateUser?: (user: User) => void;
-   getAllUser?:()=>void
-}
-
-const UserList: React.FC<UserListProps> = ({
-  users,
-  addUser,
-  deleteUser,
-  updateUser,
-  getAllUser
-}) => { 
-  const handleAddUser = (id:number) => {
-    alert(id);
-    
-
-    // addUser?.(newUser);
-  };
-
-  const handleDeleteUser = (userId: number) => {
-    deleteUser?.(userId);
-  };
-
-  const handleUpdateUser = (user: User,Username:string) => {
-    
-    console.log('user',user)
-    const updatedUser1: User = {
-      ...user,
-
-      username:"asd",
-      password: 'newpassword',
-    };
-    console.log('udpate user',updatedUser1)
-    updateUser?.(updatedUser1);
-  };
-  const getAll = ()=>{
-    getAllUser?.()
-  }
-  const userCount = (users?.length ?? 0) + 1; 
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
+ interface Counter{
+  counter:number
+ }
+const UserList: React.FC<Counter>  = ({counter}) => { 
+   
+  const users = useSelector((state: RootState) => state.users);
+  const dispatch = useDispatch();
   
+  const [newUser, setNewUser] = React.useState<User>({ id: '', username: '', password: '' });
+  const [updateUserDetails, setUpdateUserDetails] = React.useState<User | null>(null);
 
-  const [number, setNumber] = React.useState(userCount);
-  const [listOfUser,setListOfUser] = React.useState(Array<object>)
- console.log('listOfUser',listOfUser)
+  const handleAddUser = () => {
+    if (newUser.username.trim() === '' || newUser.password.trim() === '') {
+      return; // Do not add if username or password is empty
+    }
+
+    dispatch(addUser(newUser));
+    setNewUser({ id: '', username: '', password: '' });
+  };
+
+  const handleUpdateUser = () => {
+    if (updateUserDetails && updateUserDetails.username.trim() !== '' && updateUserDetails.password.trim() !== '') {
+      dispatch(updateUser(updateUserDetails));
+      setUpdateUserDetails(null);
+    }
+  };
+
+  const handleDeleteUser = (id: string) => {
+    dispatch(deleteUser(id));
+  };
+  const dispatchAddUser = useCallback((user: User) => dispatch(addUser(user)), [dispatch]);
+  const dispatchUpdateUser = useCallback((user: User) => dispatch(updateUser(user)), [dispatch]);
+  const dispatchDeleteUser = useCallback((id: string) => dispatch(deleteUser(id)), [dispatch]);
+
   useEffect( () => { 
-    console.log('DOM has changed');
-    console.log(users)
-    setNumber(userCount)
+   
     const fetch = async ()=>{
 
        let x =await fn({ method: 'get', url: 'https://localhost:7224/api/admin/getAll', data:null });   
        let {data} =x as any
-       setListOfUser(data);
-       addUser?.(data)
+       console.log('data',data)
+       data.forEach((element:User) => dispatch(addUser(element as User)))
    
     }
     fetch()
-  },[]); 
+  },[counter]); 
+  // debugger
   // },[users,userCount]); 
   return (
     <div>
@@ -126,7 +102,7 @@ const UserList: React.FC<UserListProps> = ({
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={() => handleUpdateUser(user,"random")}
+                      // onClick={() => handleUpdateUser(user,"random")}
                     >
                       Update
                     </Button>
@@ -146,10 +122,18 @@ const UserList: React.FC<UserListProps> = ({
       </Paper>
     </Container>
  
+    <button onClick={handleAddUser}>Add User</button>
+      <button onClick={handleUpdateUser}>Update User</button> 
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>
+            Username: {user.username}, Password: {user.password}
+          </li>
+        ))}
+      </ul>
 
-
-    <button className='btn btn-primary' onClick={()=>handleAddUser(number)}>Add User</button>
-    <button className='btn btn-primary' onClick={()=>getAll()}>get All User</button>
+    {/* <button className='btn btn-primary' onClick={()=>handleAddUser(number)}>Add User</button> */}
+  
 
     {/* <button onClick={openModal}>Open Modal</button> */}
     {/* <Modal isOpen={isOpen} onRequestClose={closeModal}>

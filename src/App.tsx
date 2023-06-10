@@ -17,7 +17,7 @@ import { Login } from './component/login';
 const queryClient = new QueryClient();
 
 function App() {
-   
+   let counter =1;
    
   return (
     <QueryClientProvider client={queryClient}>
@@ -31,7 +31,7 @@ function App() {
         path="/user"
         element={
           <ProtectedRoute>
-            <UserList />
+            <UserList counter={counter}/>
           </ProtectedRoute>
         }
          />
