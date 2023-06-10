@@ -1,7 +1,7 @@
 export interface User {
-    Id:number,
-    Username:string,
-    Password:string
+    id:number,
+    username:string,
+    password:string
 }
 
 export const addUser = (user: User) => ({
@@ -18,7 +18,7 @@ export const updateUser = (user: User) => ({
   type: 'UPDATE_USER',
   payload: user,
 });
-export const getAllUser = (user: User) => ({
+export const getAllUser = () => ({
   type: 'GET_USER',
-  payload: user,
+  
 });

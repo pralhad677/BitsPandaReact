@@ -5,7 +5,9 @@ import { User, addUser, deleteUser, updateUser } from '../Redux/userActions';
 import { Container, Grid, Paper, Typography,Button,Box } from '@mui/material';
 import Modal from 'react-modal';
 import MyForm from './SignUp';
-// import {useQueries} from 'react-query'
+import { fn } from './generic'; 
+
+import { useSelector, useDispatch } from 'react-redux';
 Modal.setAppElement('#root');
 interface UserListProps {
   users?: User[];
@@ -14,6 +16,7 @@ interface UserListProps {
   addUser?: (user: User) => void;
   deleteUser?: (userId: number) => void;
   updateUser?: (user: User) => void;
+   getAllUser?:()=>void
 }
 
 const UserList: React.FC<UserListProps> = ({
@@ -21,17 +24,13 @@ const UserList: React.FC<UserListProps> = ({
   addUser,
   deleteUser,
   updateUser,
-}) => {
-     
+  getAllUser
+}) => { 
   const handleAddUser = (id:number) => {
     alert(id);
-    const newUser: User = {
-      Id: id,
-      Username: 'JohnDoe',
-      Password: 'password',
-    };
+    
 
-    addUser?.(newUser);
+    // addUser?.(newUser);
   };
 
   const handleDeleteUser = (userId: number) => {
@@ -44,12 +43,15 @@ const UserList: React.FC<UserListProps> = ({
     const updatedUser1: User = {
       ...user,
 
-      Username:"asd",
-      Password: 'newpassword',
+      username:"asd",
+      password: 'newpassword',
     };
     console.log('udpate user',updatedUser1)
     updateUser?.(updatedUser1);
   };
+  const getAll = ()=>{
+    getAllUser?.()
+  }
   const userCount = (users?.length ?? 0) + 1; 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -64,14 +66,23 @@ const UserList: React.FC<UserListProps> = ({
   
 
   const [number, setNumber] = React.useState(userCount);
-   
-  useEffect(() => {
-    // This code will run after every render
-    // You can perform DOM manipulation or other side effects here
+  const [listOfUser,setListOfUser] = React.useState(Array<object>)
+ console.log('listOfUser',listOfUser)
+  useEffect( () => { 
     console.log('DOM has changed');
     console.log(users)
     setNumber(userCount)
-  },[users,userCount]); 
+    const fetch = async ()=>{
+
+       let x =await fn({ method: 'get', url: 'https://localhost:7224/api/admin/getAll', data:null });   
+       let {data} =x as any
+       setListOfUser(data);
+       addUser?.(data)
+   
+    }
+    fetch()
+  },[]); 
+  // },[users,userCount]); 
   return (
     <div>
         
@@ -97,17 +108,18 @@ const UserList: React.FC<UserListProps> = ({
               <Grid item xs={3}></Grid>
             </Grid>
           </Grid>
+          {users?.length}
           {users?.map((user) => (
-            <Grid item xs={12} key={user.Id}>
+            <Grid item xs={12} key={user?.id}>
               <Grid container alignItems="center" spacing={2}>
                 <Grid item xs={3}>
-                  <Typography>{user.Id}</Typography>
+                  <Typography>{user.id}</Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography>{user.Username}</Typography>
+                  <Typography>{user.username}</Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography>{user.Password}</Typography>
+                  <Typography>{user.password}</Typography>
                 </Grid>
                 <Grid item xs={3}>
                   <Box sx={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
@@ -121,7 +133,7 @@ const UserList: React.FC<UserListProps> = ({
                     <Button
                       variant="contained"
                       color="secondary"
-                      onClick={() => handleDeleteUser(user.Id)}
+                      onClick={() => handleDeleteUser(user.id)}
                     >
                       Delete
                     </Button>
@@ -137,13 +149,14 @@ const UserList: React.FC<UserListProps> = ({
 
 
     <button className='btn btn-primary' onClick={()=>handleAddUser(number)}>Add User</button>
+    <button className='btn btn-primary' onClick={()=>getAll()}>get All User</button>
 
-    <button onClick={openModal}>Open Modal</button>
-    <Modal isOpen={isOpen} onRequestClose={closeModal}>
-       {/* <MyForm /> */}
+    {/* <button onClick={openModal}>Open Modal</button> */}
+    {/* <Modal isOpen={isOpen} onRequestClose={closeModal}>
+       
         <p>This is the content of the modal.</p>
         <button onClick={closeModal}>Close</button>
-      </Modal>
+      </Modal> */}
       
     </div>
   );

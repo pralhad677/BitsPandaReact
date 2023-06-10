@@ -1,8 +1,8 @@
 // userReducer.ts
 interface User {
-    Id:string,
-    Username:string,
-    Password:string
+    id:string,
+    username:string,
+    password:string
 }
 
 interface UserState {
@@ -16,6 +16,7 @@ const initialState: UserState = {
 const userReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case 'ADD_USER':
+      console.log('action.payload',action.payload)
       return {
         ...state,
         users: [...state.users, action.payload],
@@ -23,19 +24,19 @@ const userReducer = (state = initialState, action: any) => {
     case 'DELETE_USER':
       return {
         ...state,
-        users: state.users.filter((user) => user.Id !== action.payload),
+        users: state.users.filter((user) => user.id !== action.payload),
       };
     case 'UPDATE_USER':
        
-    console.log('state',state)
-    console.log('action.payload.id',action.payload)
+      alert('update')
       return {
         ...state,
         users: state.users.map((user) =>
-          user.Id === action.payload.Id ? action.payload : user
+          user.id === action.payload.id ? action.payload : user
         ),
       };
     case 'GET_USER':
+      alert('get user')
       return {
         ...state
        
