@@ -28,6 +28,7 @@ export function userReducer(state = initialState, action: UserActionTypes): Root
         ),
       };
     case DELETE_USER:
+        alert('delete')
       return {
         ...state,
         users: state.users.filter((user) => user.id !== action.payload),

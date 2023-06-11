@@ -60,14 +60,7 @@ const dispatch = useDispatch();
     if(isSuccess){
         handleUpdateUser(data1[0] as User)
       closeModal()
-    //     let x =await fn({ method: 'get', url: 'https://localhost:7224/api/admin/getAll', data:null });   
-    //    let {data} =x as any
-    //    console.log('data',data)
-    //    data.forEach((element:typeof User) => dispatch(addUser(element as any)))
-    //    sessionStorage.setItem('token',token);
-    //    setAuthenticated(true);
-    //    setOpen(false)
-    //    navigate('/');
+  
    } 
   };
   

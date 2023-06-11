@@ -50,7 +50,10 @@ const UserList: React.FC = () => {
     dispatch(updateUser(user));
   };
 
-  const handleDeleteUser = (id: string) => {
+  const handleDeleteUser = async (id: string) => {
+    
+    let x =await fn({ method: 'delete', url: `https://localhost:7224/api/admin/deleteByAdminId?Id=${id}`, data:null });   
+   console.log(x)
     dispatch(deleteUser(id));
   }; 
 
