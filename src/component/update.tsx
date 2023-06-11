@@ -57,6 +57,10 @@ const dispatch = useDispatch();
     // let x = await fn({ method: 'patch', url: `https://localhost:7224/api/admin/updateAdmin?Id=${id}&Username="lkll"`, data });   
     console.log('x',x)
     let { isSuccess,data:data1} =x as any
+    console.log('data1',data1)
+    if(isSuccess ===false){
+        alert(`${data1}`)
+    }
     if(isSuccess){
         handleUpdateUser(data1[0] as User)
       closeModal()
