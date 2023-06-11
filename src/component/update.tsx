@@ -8,12 +8,15 @@ import { Link,useNavigate   } from 'react-router-dom';
 import { fn } from './generic';
 import { AuthContext } from '../AuthGuard/AuthProvider'; 
 import MySnackbar from './snackbar';
+import { useDispatch } from 'react-redux';
  
-
-
+import { addUser } from '../Redux/action';
+import {User} from '../Redux/type'
+ 
+ 
 const schema = z.object({
   Username: z.string().nonempty().max(20),
-  Password: z.string().min(6), 
+  
 });
 
 const validateUsername = (value:string) => {
@@ -23,27 +26,18 @@ const validateUsername = (value:string) => {
   return value.length <= 20 || 'Username should not exceed 20 characters';
 };
 
-const validatePassword = (value:string) => {
-  return value.length >= 6 || 'Password should be at least 6 characters';
-};
+ 
 
 interface UpdateForm{
     id:string,
     username:string,
+    closeModal: () => void,
+    handleUpdateUser:(user:  User) => void
     // password:string,
 }
-export const Update:React.FC<UpdateForm> = ({username,id}) => {
-    alert(id)
-  const myStyle = {
-    color: 'red',
-    fontSize: '16px',
-    fontWeight: 'bold',
-     
-    ':hover': {
-      backgroundColor: 'black',
-      cursor: 'pointer',
-    },
-  };
+export const Update:React.FC<UpdateForm> = ({username,id,closeModal,handleUpdateUser}) => {
+   
+const dispatch = useDispatch();
 
   const {
     register,
@@ -52,28 +46,35 @@ export const Update:React.FC<UpdateForm> = ({username,id}) => {
     
   } = useForm(); 
    
-
-  const { isAuthenticated, setAuthenticated } = useContext(AuthContext);
-  const [open,setOpen] = React.useState(false)
-  const navigate = useNavigate();
+ 
+//   const [open,setOpen] = React.useState(false) 
+   
   const onSubmit =async (data:Record<string,any>) => {
-    console.log('data',data); 
+    
+    console.log('data',data.Username); 
     console.log(`https://localhost:7224/api/admin/updateAdmin?Id=${id}&Username=${username}`)
-    let x = await fn({ method: 'patch', url: `https://localhost:7224/api/admin/updateAdmin?Id=${id}&Username=${username}`, data });   
+    let x = await fn({ method: 'patch', url: `https://localhost:7224/api/admin/updateAdmin?Id=${id}&Username=${data.Username}`, data });   
     // let x = await fn({ method: 'patch', url: `https://localhost:7224/api/admin/updateAdmin?Id=${id}&Username="lkll"`, data });   
     console.log('x',x)
-    let {message:token,isSuccess} =x as any
+    let { isSuccess,data:data1} =x as any
     if(isSuccess){
-      
-
+        handleUpdateUser(data1[0] as User)
+      closeModal()
+    //     let x =await fn({ method: 'get', url: 'https://localhost:7224/api/admin/getAll', data:null });   
+    //    let {data} =x as any
+    //    console.log('data',data)
+    //    data.forEach((element:typeof User) => dispatch(addUser(element as any)))
     //    sessionStorage.setItem('token',token);
     //    setAuthenticated(true);
-       setOpen(false)
+    //    setOpen(false)
     //    navigate('/');
    } 
   };
-
+  
   const isFormValid = Object.keys(errors).length === 0;
+  console.log('isFormValid',isFormValid)
+
+ 
   React.useEffect(()=>{ 
     
   },[])
@@ -85,16 +86,19 @@ export const Update:React.FC<UpdateForm> = ({username,id}) => {
         <div className="col-md-3">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="m-3">
-              <TextField
+             
+                <TextField
                 label="Username"
+                // value={text}
                 type="text"
-                value={username}
+                // onChange={handleTextChange}
                 {...register('Username', {
-                  validate: validateUsername,
-                })}
+                    validate: validateUsername,
+                  })}
                 error={!!errors.Username}
                 helperText={errors.Username ? String(errors.Username.message) : ''}
-              />
+                />
+
             </div>
            
           

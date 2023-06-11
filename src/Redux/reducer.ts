@@ -20,6 +20,7 @@ export function userReducer(state = initialState, action: UserActionTypes): Root
         // users: [...state.users, action.payload],
       };
     case UPDATE_USER:
+        alert('update')
       return {
         ...state,
         users: state.users.map((user) =>

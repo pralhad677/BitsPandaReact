@@ -44,16 +44,9 @@ const UserList: React.FC = () => {
     setNewUser({ id: '', username: '', password: '' });
   };
 
-  const handleUpdateUser = (id:any,username:string,password:string) => {
-    // if (updateUserDetails && updateUserDetails.username.trim() !== '' && updateUserDetails.password.trim() !== '') {
-    //   dispatch(updateUser(updateUserDetails));
-    //   setUpdateUserDetails(null);
-    // }
-    let user:User = {
-      id,
-      username,
-      password
-    }
+  const handleUpdateUser = (user:User) => {
+    
+    
     dispatch(updateUser(user));
   };
 
@@ -69,12 +62,12 @@ const UserList: React.FC = () => {
        let {data} =x as any
        console.log('data',data)
        data.forEach((element:User) => dispatch(addUser(element as User)))
-   
+   users.filter(data=>{
+    return data.id !== userId
+   })
     }
     fetch()
-  },[]); 
-  // debugger
-  // },[users,userCount]); 
+  },[]);   
   return (
     <div>
         
@@ -149,8 +142,8 @@ const UserList: React.FC = () => {
     <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
        
         {/* <p>This is the content of the modal.</p> */}
-        <Update username={updateUsername} id={userId}/>
-        <button onClick={closeModal}>Close</button>
+        <Update username={updateUsername} id={userId} closeModal={closeModal} handleUpdateUser={handleUpdateUser}/>
+        {/* <button onClick={closeModal}>Close</button> */}
       </Modal>
       
     </div>
