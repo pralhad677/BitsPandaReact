@@ -53,8 +53,11 @@ const MyForm = () => {
    
     console.log('data',data);
     let x = await fn({ method: 'post', url: 'https://localhost:7224/api/admin/SignUp', data });   
-    let {message:token,isSuccess} =x as any
-    
+    let {message:token,isSuccess,errors} =x as any
+    console.log('x',x)
+    if(isSuccess ===false){
+      alert('user laready exist')
+    }
     if(isSuccess){
       
  
@@ -114,7 +117,7 @@ const MyForm = () => {
                 Signup
               </button>
                <div className='d-flex'>
-                <text>already a user?</text>
+                <span>already a user?</span>
                 <Link className="nav-link " style={myStyle} to="/Login">Login</Link> 
 
                </div>

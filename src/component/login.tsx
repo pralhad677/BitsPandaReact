@@ -6,8 +6,7 @@ import TextField from '@mui/material/TextField';
 import   './Form.css'
 import { Link,useNavigate   } from 'react-router-dom'; 
 import { fn } from './generic';
-import { AuthContext } from '../AuthGuard/AuthProvider'; 
-import MySnackbar from './snackbar';
+import { AuthContext } from '../AuthGuard/AuthProvider';  
 interface Post {
     userId: number;
     id:number 
@@ -60,11 +59,15 @@ export const Login = () => {
     // { method: 'get', url: 'https://localhost:7224/api/admin/getAll', data: null }
     let x = await fn({ method: 'post', url: 'https://localhost:7224/api/admin/Login', data });   
     let {message:token,isSuccess} =x as any
-    
+    console.log('x',x)
+    if(isSuccess===false){
+        alert(token)
+    }
     if(isSuccess){
       
 
        sessionStorage.setItem('token',token);
+       sessionStorage.setItem('user',data.Username);
        setAuthenticated(true);
        setOpen(true)
        navigate('/');

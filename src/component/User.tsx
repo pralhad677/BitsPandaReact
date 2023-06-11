@@ -9,7 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addUser, updateUser, deleteUser } from '../Redux/action';
 import { RootState, User } from '../Redux/type';
 import { Update } from './update';
-
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../AuthGuard/AuthProvider';
+ 
  
 Modal.setAppElement('#root');
  interface Counter{
@@ -18,6 +20,7 @@ Modal.setAppElement('#root');
 const UserList: React.FC = () => { 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [updateUsername,setupdateUserName] = React.useState<string>("")
+  const navigate = useNavigate();
   const [userId,setUserId] = React.useState<string>("")
   const openModal = (username:string,id:string) => {
     setIsModalOpen(true);
@@ -31,6 +34,7 @@ const UserList: React.FC = () => {
 
   const users = useSelector((state: RootState) => state.users);
   const dispatch = useDispatch();
+  const { isAuthenticated, setAuthenticated } = React.useContext(AuthContext);
   
   const [newUser, setNewUser] = React.useState<User>({ id: '', username: '', password: '' });
   const [updateUserDetails, setUpdateUserDetails] = React.useState<User | null>(null);
@@ -56,9 +60,14 @@ const UserList: React.FC = () => {
    console.log(x)
     dispatch(deleteUser(id));
   }; 
-
+const logout = ()=>{
+  sessionStorage.removeItem('token');
+  sessionStorage.removeItem('user');
+  setAuthenticated(false)
+ navigate('/')
+}
   useEffect( () => { 
-   
+  //  alert(' useEffect')
     const fetch = async ()=>{
 
        let x =await fn({ method: 'get', url: 'https://localhost:7224/api/admin/getAll', data:null });   
@@ -70,10 +79,21 @@ const UserList: React.FC = () => {
    })
     }
     fetch()
-  },[]);   
+    const handleBackNavigation = () => {
+      window.location.href = '/user'; // Redirect to home page or another URL of your choice
+    };
+
+    // Add event listener to block the back button
+    window.addEventListener('popstate', handleBackNavigation);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('popstate', handleBackNavigation);
+    };
+  },[dispatch]);   
   return (
     <div>
-        
+        <button onClick={logout} className='btn btn-danger'>logout</button>
  
     <Container maxWidth="md">
       <Paper elevation={0} sx={{ p: 2 }}>
@@ -95,9 +115,8 @@ const UserList: React.FC = () => {
               </Grid>
               <Grid item xs={3}></Grid>
             </Grid>
-          </Grid>
-          {users?.length}
-          {users?.map((user) => (
+          </Grid> 
+          {users?.filter(x=>x.username !==sessionStorage.getItem('user') )?.map((user) => (
             <Grid item xs={12} key={user?.id}>
               <Grid container alignItems="center" spacing={2}>
                 <Grid item xs={3}>
@@ -146,7 +165,7 @@ const UserList: React.FC = () => {
        
         {/* <p>This is the content of the modal.</p> */}
         <Update username={updateUsername} id={userId} closeModal={closeModal} handleUpdateUser={handleUpdateUser}/>
-        {/* <button onClick={closeModal}>Close</button> */}
+        <button onClick={closeModal}>Close</button>
       </Modal>
       
     </div>

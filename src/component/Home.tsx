@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css'
-import { AuthContext } from '../AuthGuard/AuthProvider'; 
-import MySnackbar from './snackbar';
-
+import { AuthContext } from '../AuthGuard/AuthProvider';  
 const Home = () => { 
   const { isAuthenticated, setAuthenticated } = React.useContext(AuthContext);
    return (
@@ -16,7 +14,7 @@ const Home = () => {
       {isAuthenticated && <Link className="nav-link" to="/User">User</Link>}
       <Link className="nav-link"  to="/Signup">Form</Link>
       </nav>
-      
+      {!isAuthenticated && <h1>login to navigate to User </h1>}
     </div>
   );
 };

@@ -6,8 +6,7 @@ import TextField from '@mui/material/TextField';
 import   './Form.css'
 import { Link,useNavigate   } from 'react-router-dom'; 
 import { fn } from './generic';
-import { AuthContext } from '../AuthGuard/AuthProvider'; 
-import MySnackbar from './snackbar';
+import { AuthContext } from '../AuthGuard/AuthProvider';  
 import { useDispatch } from 'react-redux';
  
 import { addUser } from '../Redux/action';
@@ -62,7 +61,9 @@ const dispatch = useDispatch();
         alert(`${data1}`)
     }
     if(isSuccess){
-        handleUpdateUser(data1[0] as User)
+        let user =data1[0] as User
+        user.password = user.password.substring(0,10)
+        handleUpdateUser(user as User)
       closeModal()
   
    } 

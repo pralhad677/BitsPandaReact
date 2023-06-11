@@ -3,8 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './component/Home';
-import About from './component/About';
+import Home from './component/Home'; 
 import NotFound from './component/NotFound'; 
 import UserList from './component/User'
  
@@ -29,8 +28,7 @@ function App() {
       <AuthProvider>
       <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} /> 
+        <Route path="/" element={<Home />} /> 
         <Route
         path="/user"
         element={
@@ -41,7 +39,7 @@ function App() {
          />
         <Route path="/Signup" element={<MyForm />} />
         <Route path="/Login" element={<Login />} />
-        <Route path="/A" element={<A />} />
+       
         <Route path="*" element={<NotFound />} />
       </Routes>
       </BrowserRouter>
