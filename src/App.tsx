@@ -14,11 +14,15 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ProtectedRoute } from './AuthGuard/AuthGuard';
 import { AuthContext, AuthProvider } from './AuthGuard/AuthProvider';
 import { Login } from './component/login';
+import { A } from './component/a';
 const queryClient = new QueryClient();
 
-function App() {
-   let counter =1;
-   
+function App() { 
+   console.log('app')
+ 
+   React.useEffect(()=>{
+
+   },[])
   return (
     <QueryClientProvider client={queryClient}>
       
@@ -31,12 +35,13 @@ function App() {
         path="/user"
         element={
           <ProtectedRoute>
-            <UserList counter={counter}/>
+            <UserList  />
           </ProtectedRoute>
         }
          />
         <Route path="/Signup" element={<MyForm />} />
         <Route path="/Login" element={<Login />} />
+        <Route path="/A" element={<A />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </BrowserRouter>

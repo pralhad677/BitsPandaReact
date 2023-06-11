@@ -8,10 +8,16 @@ const initialState: RootState = {
 
 export function userReducer(state = initialState, action: UserActionTypes): RootState {
   switch (action.type) {
-    case ADD_USER:
+    case ADD_USER: 
+        
       return {
         ...state,
         users: [...state.users, action.payload],
+      };
+    
+    return {
+        ...state,
+        // users: [...state.users, action.payload],
       };
     case UPDATE_USER:
       return {

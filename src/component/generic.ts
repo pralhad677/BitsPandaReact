@@ -15,7 +15,7 @@ export let fn:GenericFetch<any>= async ({method,url,data})=>{
     try{
 const response = await (axios[method] as any)(url, data);
   
-  console.log('response.data',response.data)
+ 
   return response.data;
 }catch(error:any){
     console.log('error occurs while fetching data',error)

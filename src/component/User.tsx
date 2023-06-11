@@ -8,14 +8,27 @@ import { fn } from './generic';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUser, updateUser, deleteUser } from '../Redux/action';
 import { RootState, User } from '../Redux/type';
+import { Update } from './update';
 
  
 Modal.setAppElement('#root');
  interface Counter{
   counter:number
  }
-const UserList: React.FC<Counter>  = ({counter}) => { 
-   
+const UserList: React.FC = () => { 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [updateUsername,setupdateUserName] = React.useState<string>("")
+  const [userId,setUserId] = React.useState<string>("")
+  const openModal = (username:string,id:string) => {
+    setIsModalOpen(true);
+    setupdateUserName(username)
+    setUserId(id)
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   const users = useSelector((state: RootState) => state.users);
   const dispatch = useDispatch();
   
@@ -31,19 +44,22 @@ const UserList: React.FC<Counter>  = ({counter}) => {
     setNewUser({ id: '', username: '', password: '' });
   };
 
-  const handleUpdateUser = () => {
-    if (updateUserDetails && updateUserDetails.username.trim() !== '' && updateUserDetails.password.trim() !== '') {
-      dispatch(updateUser(updateUserDetails));
-      setUpdateUserDetails(null);
+  const handleUpdateUser = (id:any,username:string,password:string) => {
+    // if (updateUserDetails && updateUserDetails.username.trim() !== '' && updateUserDetails.password.trim() !== '') {
+    //   dispatch(updateUser(updateUserDetails));
+    //   setUpdateUserDetails(null);
+    // }
+    let user:User = {
+      id,
+      username,
+      password
     }
+    dispatch(updateUser(user));
   };
 
   const handleDeleteUser = (id: string) => {
     dispatch(deleteUser(id));
-  };
-  const dispatchAddUser = useCallback((user: User) => dispatch(addUser(user)), [dispatch]);
-  const dispatchUpdateUser = useCallback((user: User) => dispatch(updateUser(user)), [dispatch]);
-  const dispatchDeleteUser = useCallback((id: string) => dispatch(deleteUser(id)), [dispatch]);
+  }; 
 
   useEffect( () => { 
    
@@ -56,7 +72,7 @@ const UserList: React.FC<Counter>  = ({counter}) => {
    
     }
     fetch()
-  },[counter]); 
+  },[]); 
   // debugger
   // },[users,userCount]); 
   return (
@@ -103,6 +119,7 @@ const UserList: React.FC<Counter>  = ({counter}) => {
                       variant="contained"
                       color="primary"
                       // onClick={() => handleUpdateUser(user,"random")}
+                      onClick={()=>openModal(user.username,user.id)}
                     >
                       Update
                     </Button>
@@ -121,26 +138,20 @@ const UserList: React.FC<Counter>  = ({counter}) => {
         </Grid>
       </Paper>
     </Container>
- 
-    <button onClick={handleAddUser}>Add User</button>
-      <button onClick={handleUpdateUser}>Update User</button> 
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            Username: {user.username}, Password: {user.password}
-          </li>
-        ))}
-      </ul>
+  
+      {/* <button onClick={handleUpdateUser}>Update User</button>  */}
+    
 
     {/* <button className='btn btn-primary' onClick={()=>handleAddUser(number)}>Add User</button> */}
   
 
     {/* <button onClick={openModal}>Open Modal</button> */}
-    {/* <Modal isOpen={isOpen} onRequestClose={closeModal}>
+    <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
        
-        <p>This is the content of the modal.</p>
+        {/* <p>This is the content of the modal.</p> */}
+        <Update username={updateUsername} id={userId}/>
         <button onClick={closeModal}>Close</button>
-      </Modal> */}
+      </Modal>
       
     </div>
   );
@@ -148,7 +159,7 @@ const UserList: React.FC<Counter>  = ({counter}) => {
 
 const mapStateToProps = (state: any) => {
   return {
-    ...state, // Pass all state properties to the component
+    ...state,  
   };
 };
 
